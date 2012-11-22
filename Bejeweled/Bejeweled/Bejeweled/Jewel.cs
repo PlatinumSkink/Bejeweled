@@ -13,6 +13,8 @@ namespace Bejeweled
         public bool found = false;
         public bool falling = false;
 
+        public bool Selected = false;
+
         public Jewel(string _textureName, Vector2 _position, int randomJewel, bool _Checked)
             : base(_textureName, _position, 0, 2, new Vector2(0, 1))
         {
@@ -29,6 +31,14 @@ namespace Bejeweled
             {
                 acceleration = 0;
                 speed = 0;
+            }
+            if (Selected == true)
+            {
+                color = Color.Red;
+            }
+            else
+            {
+                color = Color.White;
             }
             base.Update(gameTime);
         }

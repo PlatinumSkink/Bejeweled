@@ -50,7 +50,7 @@ namespace Bejeweled
                     }
                     for (int j = i; j < jewelLine.Count; j++)
                     {
-                        if (j != i) 
+                        if (j != i)                                                                                                                         
                         {
                             if (jewelLine[j].falling == false && jewelLine[i].CollisionRectangle().Intersects(jewelLine[j].CollisionRectangle())) 
                             {

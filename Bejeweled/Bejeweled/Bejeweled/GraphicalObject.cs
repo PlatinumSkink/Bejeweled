@@ -11,6 +11,7 @@ namespace Bejeweled
     class GraphicalObject:Position
     {
         Texture2D texture;
+        protected Color color = Color.White;
         
         public GraphicalObject(string _textureName, Vector2 _position)
             : base(_position)
@@ -37,7 +38,7 @@ namespace Bejeweled
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, CollisionRectangle(), Color.White);
+            spriteBatch.Draw(texture, CollisionRectangle(), color);
         }
     }
 }
