@@ -4,17 +4,20 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Bejeweled
 {
     class JewelHandler:Position
     {
         List<Jewel> jewelList = new List<Jewel>();
-        List<Point> directions = new List<Point>();
+        List<int> directions = new List<int>();
 
         Vector2 WorldSize;
         int jewelSize = 32;
         Random rand = new Random();
+
+        bool pressedG = false;
 
         byte numberOfJewels;
 
@@ -24,10 +27,10 @@ namespace Bejeweled
             WorldSize = _WorldSize;
             jewelSize = _jewelSize;
             numberOfJewels = _numberOfJewels;
-            directions.Add(new Point(1, 0));
-            directions.Add(new Point(-1, 0));
-            directions.Add(new Point(0, (int)WorldSize.X));
-            directions.Add(new Point(0, (int)-WorldSize.X));
+            directions.Add(1);
+            directions.Add(-1);
+            directions.Add((int)WorldSize.X);
+            directions.Add((int)-WorldSize.X);
             NewWorld();
         }
         public void NewWorld()
@@ -42,9 +45,19 @@ namespace Bejeweled
         }
         public void Update(GameTime gameTime) 
         {
+            KeyboardState ks = Keyboard.GetState();
             foreach (var jewel in jewelList)
             {
                 jewel.Update(gameTime);
+            }
+            if (ks.IsKeyDown(Keys.G) && pressedG == false)
+            {
+                CheckCourse();
+                pressedG = true;
+            }
+            else
+            {
+                pressedG = false;
             }
         }
         public void CheckCourse()
@@ -59,7 +72,18 @@ namespace Bejeweled
         }
         public void CheckAround(Jewel jewel)
         {
-
+            jewel.Checked = true;
+            foreach (int direction in directions)
+            {
+                int index = jewelList.IndexOf(jewel) + direction;
+                if (index >= 0 && index <= jewelList.Count)
+                {
+                    if (jewelList[index].Checked == false && jewelList[index].Name == jewel.Name)
+                    {
+                        CheckAround(jewelList[index]);
+                    }
+                }
+            }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
