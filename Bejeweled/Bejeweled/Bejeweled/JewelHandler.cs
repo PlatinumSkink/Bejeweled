@@ -55,7 +55,7 @@ namespace Bejeweled
                 CheckCourse();
                 pressedG = true;
             }
-            else
+            else if (ks.IsKeyUp(Keys.G) && pressedG == true)
             {
                 pressedG = false;
             }
@@ -76,7 +76,7 @@ namespace Bejeweled
             foreach (int direction in directions)
             {
                 int index = jewelList.IndexOf(jewel) + direction;
-                if (index >= 0 && index <= jewelList.Count)
+                if (index >= 0 && index < jewelList.Count)
                 {
                     if (jewelList[index].Checked == false && jewelList[index].Name == jewel.Name)
                     {
