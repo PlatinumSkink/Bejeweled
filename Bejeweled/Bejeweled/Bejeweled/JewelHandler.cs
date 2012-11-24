@@ -10,8 +10,10 @@ namespace Bejeweled
 {
     class JewelHandler:Position
     {
-        List<Jewel> jewelList = new List<Jewel>();
+        //List<Jewel> jewelList = new List<Jewel>();
         List<int> directions = new List<int>();
+
+        List<JewelList> jewelLists = new List<JewelList>();
 
         Vector2 WorldSize;
         int jewelSize = 32;
@@ -35,24 +37,21 @@ namespace Bejeweled
         }
         public void NewWorld()
         {
-            for (int y = 0; y < WorldSize.Y; y++)
+            for (int x = 0; x < WorldSize.X; x++)
             {
-                for (int x = 0; x < WorldSize.X; x++)
-                {
-                    jewelList.Add(new Jewel("Circle", new Vector2(X + jewelSize * x, Y + jewelSize * y), rand.Next(0, numberOfJewels), false));
-                }
+                jewelLists.Add(new JewelList(WorldSize, jewelSize, numberOfJewels, new Vector2(X + jewelSize * x, Y)));
             }
         }
         public void Update(GameTime gameTime) 
         {
             KeyboardState ks = Keyboard.GetState();
-            foreach (var jewel in jewelList)
+            foreach (var jewelList in jewelLists)
             {
-                jewel.Update(gameTime);
+                jewelList.Update(gameTime);
             }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
             {
-                CheckCourse();
+                //CheckCourse();
                 pressedG = true;
             }
             else if (ks.IsKeyUp(Keys.G) && pressedG == true)
@@ -62,42 +61,34 @@ namespace Bejeweled
         }
         public void CheckCourse()
         {
-            for (int i = 0; i < jewelList.Count; i++)
+            /*for (int i = 0; i < jewelList.Count; i++)
             {
                 if (jewelList[i].Checked == false)
                 {
                     CheckAround(jewelList[i]);
                 }
-            }
+            }*/
         }
         public void CheckAround(Jewel jewel)
         {
             jewel.Checked = true;
             foreach (int direction in directions)
             {
-                int index = jewelList.IndexOf(jewel) + direction;
+                /*int index = jewelList.IndexOf(jewel) + direction;
                 if (index >= 0 && index < jewelList.Count)
                 {
                     if (jewelList[index].Checked == false && jewelList[index].Name == jewel.Name)
                     {
                         CheckAround(jewelList[index]);
                     }
-                }
+                }*/
             }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Jewel jewel in jewelList)
+            foreach (JewelList jewelList in jewelLists)
             {
-                if (jewel.Selected == false)
-                {
-                    
-                }
-                else
-                {
-
-                }
-                jewel.Draw(spriteBatch);
+                jewelList.Draw(spriteBatch);
             }
         }
     }

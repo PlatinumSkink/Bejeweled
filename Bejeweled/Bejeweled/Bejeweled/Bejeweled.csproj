@@ -111,6 +111,7 @@
     <Compile Include="GraphicalObject.cs" />
     <Compile Include="Jewel.cs" />
     <Compile Include="JewelHandler.cs" />
+    <Compile Include="JewelList.cs" />
     <Compile Include="JewelManager.cs" />
     <Compile Include="MovingObject.cs" />
     <Compile Include="Position.cs" />
