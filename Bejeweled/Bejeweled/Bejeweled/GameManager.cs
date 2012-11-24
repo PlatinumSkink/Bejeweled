@@ -14,7 +14,7 @@ namespace Bejeweled
         public GameManager()
         {
             jewelManager = new JewelManager(new Vector2(0, 0));
-            jewelHandler = new JewelHandler(new Vector2(10, 10), 32, 6, new Vector2(100, 100));
+            jewelHandler = new JewelHandler(new Vector2(10, 10), 32, 4, new Vector2(100, 100));
         }
         public void Update(GameTime gameTime)
         {

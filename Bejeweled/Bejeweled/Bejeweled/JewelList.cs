@@ -9,7 +9,7 @@ namespace Bejeweled
 {
     class JewelList : Position
     {
-        List<Jewel> jewelList = new List<Jewel>();
+        public List<Jewel> jewelList = new List<Jewel>();
         Vector2 WorldSize;
         int jewelSize;
         byte numberOfJewels;
@@ -21,7 +21,7 @@ namespace Bejeweled
             WorldSize = _WorldSize;
             jewelSize = _jewelSize;
             numberOfJewels = _numberOfJewels;
-            NewWorld();
+            //NewWorld();
         }
         public void NewWorld()
         {
@@ -29,6 +29,10 @@ namespace Bejeweled
             {
                 jewelList.Add(new Jewel("Circle", new Vector2(X, Y + jewelSize * y), rand.Next(0, numberOfJewels), false));
             }
+        }
+        public void NewJewel(int y, int randomJewel)
+        {
+            jewelList.Add(new Jewel("Circle", new Vector2(X, Y + jewelSize * y), randomJewel, false));
         }
         public void Update(GameTime gameTime)
         {
