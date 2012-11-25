@@ -13,6 +13,8 @@ namespace Bejeweled
         public bool found = false;
         public bool falling = false;
 
+        public bool up = false;
+
         public bool Selected = false;
 
         public Jewel(string _textureName, Vector2 _position, int randomJewel, bool _Checked)
@@ -20,6 +22,10 @@ namespace Bejeweled
         {
             RandomJewel(randomJewel);
             Checked = _Checked;
+            if (Checked == true)
+            {
+                falling = true;
+            }
         }
         public override void Update(GameTime gameTime)
         {

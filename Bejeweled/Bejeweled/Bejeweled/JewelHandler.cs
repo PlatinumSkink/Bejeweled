@@ -16,6 +16,8 @@ namespace Bejeweled
 
         List<JewelList> jewelLists = new List<JewelList>();
         List<Point> FoundJewels = new List<Point>();
+        List<Jewel> Found = new List<Jewel>();
+        List<int> FoundList = new List<int>();
 
         Vector2 WorldSize;
         int jewelSize = 32;
@@ -61,6 +63,18 @@ namespace Bejeweled
             foreach (var jewelList in jewelLists)
             {
                 jewelList.Update(gameTime);
+                for (int y = (int)WorldSize.Y - 1; y >= 0; y--) 
+                {
+                    bool fall = false;
+                    if (fall == false && jewelList.jewelList[y].falling == true) 
+                    {
+                        if (jewelList.jewelList[y].CollisionRectangle().Intersects(jewelList.jewelList[y - 1].CollisionRectangle()) && jewelList.jewelList[y - 1].falling == false)
+                        {
+                            jewelList.jewelList[y].falling = false;
+                            jewelList.jewelList[y].Y = jewelList.jewelList[y - 1].Y - jewelSize;
+                        }
+                    }
+                }
             }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
             {
@@ -85,10 +99,7 @@ namespace Bejeweled
                             CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
                             if (matchedJewels >= 3)
                             {
-                                foreach (Point position in FoundJewels)
-                                {
-                                    jewelLists[position.X].jewelList.Remove(jewelLists[position.X].jewelList[position.Y]);
-                                }
+                                RemoveStuff();
                                 return;
                             }
                             else
@@ -115,10 +126,7 @@ namespace Bejeweled
                     CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
                     if (matchedJewels >= 3)
                     {
-                        foreach (Point position in FoundJewels)
-                        {
-                            jewelLists[position.X].jewelList.Remove(jewelLists[position.X].jewelList[position.Y]);
-                        }
+                        RemoveStuff();
                         return;
                     }
                     else
@@ -139,6 +147,8 @@ namespace Bejeweled
         {
             jewel.Checked = true;
             FoundJewels.Add(new Point(jewelLists.IndexOf(jewelList), jewelList.jewelList.IndexOf(jewel)));
+            Found.Add(jewel);
+            FoundList.Add(jewelLists.IndexOf(jewelList));
             jewel.found = true;
             matchedJewels++;
             foreach (var direction in directions)
@@ -163,6 +173,31 @@ namespace Bejeweled
                     }
                 }*/
             }
+        }
+        public void RemoveStuff()
+        {
+            /*foreach (Point position in FoundJewels)
+                        {
+                            jewelLists[position.X].jewelList.Remove(jewelLists[position.X].jewelList[position.Y]);
+                        }*/
+            int index = 0;
+            int height = 0;
+            foreach (Jewel jewel in Found)
+            {
+                int jewelCount = jewelLists[FoundList[index]].jewelList.IndexOf(jewel);
+                jewelLists[FoundList[index]].jewelList.Remove(jewelLists[FoundList[index]].jewelList[jewelCount]);
+                jewelLists[FoundList[index]].jewelList.Add(new Jewel("Circle", new Vector2(jewelLists[FoundList[index]].X, Y - jewelSize - jewelSize * height), rand.Next(0, numberOfJewels), true));
+                height++;
+                for (int i = jewelCount; i < jewelLists[FoundList[index]].jewelList.Count; i++)
+                {
+                    jewelLists[FoundList[index]].jewelList[i].falling = true;
+                }
+                index++;
+            }
+            Found = new List<Jewel>();
+            FoundList = new List<int>();
+            FoundJewels = new List<Point>();
+            return;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
