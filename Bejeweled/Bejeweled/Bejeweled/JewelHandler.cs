@@ -19,6 +19,8 @@ namespace Bejeweled
         List<Jewel> Found = new List<Jewel>();
         List<int> FoundList = new List<int>();
 
+        bool Checkie = true;
+
         Vector2 WorldSize;
         int jewelSize = 32;
         Random rand = new Random();
@@ -66,19 +68,44 @@ namespace Bejeweled
                 for (int y = (int)WorldSize.Y - 1; y >= 0; y--) 
                 {
                     bool fall = false;
-                    if (fall == false && jewelList.jewelList[y].falling == true) 
+                    if (jewelList.jewelList[y].Y > Y + jewelSize * WorldSize.Y)
                     {
-                        if (jewelList.jewelList[y].CollisionRectangle().Intersects(jewelList.jewelList[y - 1].CollisionRectangle()) && jewelList.jewelList[y - 1].falling == false)
+                        jewelList.jewelList[y].falling = false;
+                        jewelList.jewelList[y].Checked = false;
+                        jewelList.jewelList[y].Y = Y + jewelSize * WorldSize.Y - jewelSize;
+                    }
+                    if (fall == false && jewelList.jewelList[y].falling == true && y != 0) 
+                    {
+                        //if (jewelList.jewelList[y].CollisionRectangle().Intersects(jewelList.jewelList[y - 1].CollisionRectangle()) && jewelList.jewelList[y - 1].falling == false)
+
+                        //if (jewelList.jewelList[y].Y + jewelSize >= jewelList.jewelList[y - 1].Y && jewelList.jewelList[y - 1].falling == false)
+                        if (jewelList.jewelList[y].Y > Y + WorldSize.Y * jewelSize - jewelList.jewelList.IndexOf(jewelList.jewelList[y]) * jewelSize - jewelSize)
                         {
+                            jewelList.jewelList[y].Y = Y + WorldSize.Y * jewelSize - jewelList.jewelList.IndexOf(jewelList.jewelList[y]) * jewelSize - jewelSize;
+                        /*}
+                        {*/
                             jewelList.jewelList[y].falling = false;
-                            jewelList.jewelList[y].Y = jewelList.jewelList[y - 1].Y - jewelSize;
+                            jewelList.jewelList[y].Checked = false;
+                            //jewelList.jewelList[y].Y = jewelList.jewelList[y - 1].Y - jewelSize;
                         }
                     }
                 }
             }
+            if (Checkie == true)
+            {
+                if (NoneFalling())
+                {
+                    CheckCourse();
+                }
+                ResetCheck();
+            }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
             {
-                CheckCourse();
+                if (NoneFalling())
+                {
+                    CheckCourse();
+                }
+                ResetCheck();
                 pressedG = true;
             }
             else if (ks.IsKeyUp(Keys.G) && pressedG == true)
@@ -88,27 +115,35 @@ namespace Bejeweled
             if (ms.LeftButton == ButtonState.Pressed && pressedLeft == false)
             {
                 pressedLeft = true;
-                for (int x = 0; x < jewelLists.Count; x++)
+                if (NoneFalling())
                 {
-                    for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
-                    {
-                        FoundJewels = new List<Point>();
-                        matchedJewels = 0;
-                        if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
-                        {
-                            CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
-                            if (matchedJewels >= 3)
-                            {
-                                RemoveStuff();
-                                return;
-                            }
-                            else
-                            {
+                    Point mousePosition = new Point(ms.X, ms.Y);
 
+
+                    for (int x = 0; x < jewelLists.Count; x++)
+                    {
+                        for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
+                        {
+                            FoundJewels = new List<Point>();
+                            matchedJewels = 0;
+                            if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
+                            {
+                                CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
+                                if (matchedJewels >= 3)
+                                {
+                                    RemoveStuff();
+                                    ResetCheck();
+                                    return;
+                                }
+                                else
+                                {
+
+                                }
                             }
                         }
                     }
                 }
+                ResetCheck();
             }
             else if (ms.LeftButton == ButtonState.Released && pressedLeft == true)
             {
@@ -123,10 +158,14 @@ namespace Bejeweled
                 {
                     FoundJewels = new List<Point>();
                     matchedJewels = 0;
+                    Found = new List<Jewel>();
+                    FoundList = new List<int>();
+                    FoundJewels = new List<Point>();
                     CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
                     if (matchedJewels >= 3)
                     {
                         RemoveStuff();
+                        ResetCheck();
                         return;
                     }
                     else
@@ -198,6 +237,38 @@ namespace Bejeweled
             FoundList = new List<int>();
             FoundJewels = new List<Point>();
             return;
+        }
+        public void ResetCheck()
+        {
+            foreach (JewelList jewelList in jewelLists)
+            {
+                foreach (Jewel jewel in jewelList.jewelList)
+                {
+                    jewel.Checked = false;
+                    jewel.found = false;
+                    if (jewel.falling == false && jewel.Y > Y + WorldSize.Y * jewelSize - jewelList.jewelList.IndexOf(jewel) * jewelSize)
+                    {
+                        jewel.Y = Y + WorldSize.Y * jewelSize - jewelList.jewelList.IndexOf(jewel) * jewelSize;
+                    }
+                }
+            }
+            Found = new List<Jewel>();
+            FoundList = new List<int>();
+            FoundJewels = new List<Point>();
+        }
+        public bool NoneFalling()
+        {
+            foreach (JewelList jewelList in jewelLists)
+            {
+                foreach (Jewel jewel in jewelList.jewelList)
+                {
+                    if (jewel.falling == true)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
