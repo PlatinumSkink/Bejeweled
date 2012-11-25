@@ -18,6 +18,10 @@ namespace Bejeweled
         List<Point> FoundJewels = new List<Point>();
         List<Jewel> Found = new List<Jewel>();
         List<int> FoundList = new List<int>();
+        Jewel Selected;
+        Point selectedPlace = Point.Zero;
+
+        bool selected = false;
 
         bool Checkie = true;
 
@@ -93,11 +97,15 @@ namespace Bejeweled
             }
             if (Checkie == true)
             {
+                /*if (NoneFalling())
+                {*/
+                    CheckCourse();
+                //}
+                ResetCheck();
                 if (NoneFalling())
                 {
-                    CheckCourse();
+                    Checkie = false;
                 }
-                ResetCheck();
             }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
             {
@@ -118,6 +126,9 @@ namespace Bejeweled
                 if (NoneFalling())
                 {
                     Point mousePosition = new Point(ms.X, ms.Y);
+                    selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
+                    jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
+                    Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
 
 
                     for (int x = 0; x < jewelLists.Count; x++)
