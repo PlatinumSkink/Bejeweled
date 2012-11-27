@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="GameManager.cs" />
     <Compile Include="GraphicalObject.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="Jewel.cs" />
     <Compile Include="JewelHandler.cs" />
     <Compile Include="JewelList.cs" />

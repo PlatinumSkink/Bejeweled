@@ -34,13 +34,15 @@ namespace Bejeweled
 
         byte numberOfJewels;
         int matchedJewels = 0;
+        int desiredNumber = 3;
 
-        public JewelHandler(Vector2 _WorldSize, int _jewelSize, byte _numberOfJewels, Vector2 _position)
+        public JewelHandler(Vector2 _WorldSize, int _jewelSize, byte _numberOfJewels, int _desiredNumber, Vector2 _position)
             : base(_position)
         {
             WorldSize = _WorldSize;
             jewelSize = _jewelSize;
             numberOfJewels = _numberOfJewels;
+            desiredNumber = _desiredNumber;
             /*directions.Add(1);
             directions.Add(-1);
             directions.Add((int)WorldSize.X);
@@ -140,7 +142,7 @@ namespace Bejeweled
                             if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
                             {
                                 CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
-                                if (matchedJewels >= 3)
+                                if (matchedJewels >= desiredNumber)
                                 {
                                     RemoveStuff();
                                     ResetCheck();
@@ -173,7 +175,7 @@ namespace Bejeweled
                     FoundList = new List<int>();
                     FoundJewels = new List<Point>();
                     CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
-                    if (matchedJewels >= 3)
+                    if (matchedJewels >= desiredNumber)
                     {
                         RemoveStuff();
                         ResetCheck();
