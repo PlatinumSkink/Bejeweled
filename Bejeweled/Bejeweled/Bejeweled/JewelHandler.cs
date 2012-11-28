@@ -31,10 +31,13 @@ namespace Bejeweled
 
         bool pressedG = false;
         bool pressedLeft = false;
+        //bool oneIsSelected = false;
 
         byte numberOfJewels;
         int matchedJewels = 0;
         int desiredNumber = 3;
+
+        GraphicalObject SelectMarker;
 
         public JewelHandler(Vector2 _WorldSize, int _jewelSize, byte _numberOfJewels, int _desiredNumber, Vector2 _position)
             : base(_position)
@@ -51,6 +54,7 @@ namespace Bejeweled
             directions.Add(new Point(-1, 0));
             directions.Add(new Point(0, 1));
             directions.Add(new Point(0, -1));
+            SelectMarker = new GraphicalObject("Selected", new Vector2(0, 0));
             NewWorld();
         }
         public void NewWorld()
@@ -137,36 +141,63 @@ namespace Bejeweled
             if (NoneFalling())
             {
                 Point mousePosition = new Point(ms.X, ms.Y);
-                selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
-                if (ms.X / jewelSize > jewelLists.Count || ms.X / jewelSize < 0 || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) > jewelLists[0].jewelList.Count || ms.Y / jewelSize < 0)
+                if (selected == false)
                 {
-                    return;
-                }
-                jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
-                Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
-
-
-                for (int x = 0; x < jewelLists.Count; x++)
-                {
-                    for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
+                    selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
+                    if (ms.X / jewelSize > jewelLists.Count || ms.X / jewelSize < 0 || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) > jewelLists[0].jewelList.Count || ms.Y / jewelSize < 0)
                     {
-                        FoundJewels = new List<Point>();
-                        matchedJewels = 0;
-                        if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
-                        {
-                            CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
-                            if (matchedJewels >= desiredNumber)
-                            {
-                                RemoveStuff();
-                                ResetCheck();
-                                return;
-                            }
-                            else
-                            {
+                        return;
+                    }
+                    //jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
+                    Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
 
+
+                    for (int x = 0; x < jewelLists.Count; x++)
+                    {
+                        for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
+                        {
+                            FoundJewels = new List<Point>();
+                            matchedJewels = 0;
+                            if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
+                            {
+                                CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
+                                if (matchedJewels >= desiredNumber)
+                                {
+                                    RemoveStuff();
+                                    ResetCheck();
+                                    return;
+                                }
+                                else
+                                {
+
+                                }
                             }
                         }
                     }
+                    selected = true;
+                }
+                else if (selected == true)
+                {
+                    foreach (var direction in directions)
+                    {
+                        if (selectedPlace.X + direction.X >= jewelLists.Count || selectedPlace.X + direction.X <= 0 || selectedPlace.Y + direction.Y >= jewelLists[0].jewelList.Count || selectedPlace.Y + direction.Y <= 0)
+                        {
+                        }
+                        else
+                        {
+                            if (jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].CollisionRectangle().Contains(mousePosition))
+                            {
+                                string rememberName = Selected.Name;
+                                jewelLists[selectedPlace.X].jewelList[selectedPlace.Y].Name = jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Name;
+                                jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Name = rememberName;
+                                jewelLists[selectedPlace.X].jewelList[selectedPlace.Y].Load(jewelLists[selectedPlace.X].jewelList[selectedPlace.Y].Name);
+                                jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Load(jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Name);
+                                Checkie = true;
+                                break;
+                            }
+                        }
+                    }
+                    selected = false;
                 }
             }
             ResetCheck();
@@ -296,6 +327,11 @@ namespace Bejeweled
             foreach (JewelList jewelList in jewelLists)
             {
                 jewelList.Draw(spriteBatch);
+            }
+            if (selected == true)
+            {
+                SelectMarker.Pos = new Vector2(selectedPlace.X * jewelSize, (WorldSize.Y - selectedPlace.Y - 1) * jewelSize);
+                SelectMarker.Draw(spriteBatch);
             }
         }
     }

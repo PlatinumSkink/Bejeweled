@@ -19,7 +19,7 @@ namespace Bejeweled
         public GameManager(Viewport viewport)
         {
             jewelManager = new JewelManager(new Vector2(0, 0));
-            jewelHandler = new JewelHandler(new Vector2(30, 30), 32, 6, 6, new Vector2(0, 0));
+            jewelHandler = new JewelHandler(new Vector2(30, 30), 32, 6, 3, new Vector2(0, 0));
             camera = new Camera(viewport, 
                 new Rectangle(
                     (int)jewelHandler.X, 
