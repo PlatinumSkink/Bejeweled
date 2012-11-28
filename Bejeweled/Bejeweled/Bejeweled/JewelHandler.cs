@@ -105,9 +105,12 @@ namespace Bejeweled
             {
                 /*if (NoneFalling())
                 {*/
+                //for (int i = 0; i < 10; i++)
+                //{
                     CheckCourse();
+                    //}
+                    ResetCheck();
                 //}
-                ResetCheck();
                 if (NoneFalling())
                 {
                     Checkie = false;
@@ -144,7 +147,7 @@ namespace Bejeweled
                 if (selected == false)
                 {
                     selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
-                    if (ms.X / jewelSize > jewelLists.Count || ms.X / jewelSize < 0 || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) > jewelLists[0].jewelList.Count || ms.Y / jewelSize < 0)
+                    if (ms.X / jewelSize > jewelLists.Count || ms.X / jewelSize < 0 || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) > jewelLists[0].jewelList.Count || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) < 0)
                     {
                         return;
                     }
@@ -180,7 +183,7 @@ namespace Bejeweled
                 {
                     foreach (var direction in directions)
                     {
-                        if (selectedPlace.X + direction.X >= jewelLists.Count || selectedPlace.X + direction.X <= 0 || selectedPlace.Y + direction.Y >= jewelLists[0].jewelList.Count || selectedPlace.Y + direction.Y <= 0)
+                        if (selectedPlace.X + direction.X >= jewelLists.Count || selectedPlace.X + direction.X < 0 || selectedPlace.Y + direction.Y >= jewelLists[0].jewelList.Count || selectedPlace.Y + direction.Y < 0)
                         {
                         }
                         else
