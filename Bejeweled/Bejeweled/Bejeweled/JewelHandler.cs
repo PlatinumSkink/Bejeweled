@@ -25,8 +25,8 @@ namespace Bejeweled
 
         bool Checkie = true;
 
-        Vector2 WorldSize;
-        int jewelSize = 32;
+        public Vector2 WorldSize;
+        public int jewelSize = 32;
         Random rand = new Random();
 
         bool pressedG = false;
@@ -129,7 +129,7 @@ namespace Bejeweled
                 {
                     Point mousePosition = new Point(ms.X, ms.Y);
                     selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
-                    jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
+                    //jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
                     Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
 
 

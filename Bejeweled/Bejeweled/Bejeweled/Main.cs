@@ -21,6 +21,14 @@ namespace Bejeweled
 
         GameManager gameManager;
 
+        enum GameState
+        {
+            Menu,
+            Game,
+            Score
+        }
+        GameState gameState = GameState.Game;
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -50,7 +58,7 @@ namespace Bejeweled
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Position.content = Content;
 
-            gameManager = new GameManager();
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport);
             // TODO: use this.Content to load your game content here
         }
 
@@ -89,9 +97,25 @@ namespace Bejeweled
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            switch (gameState)
+            {
+                case GameState.Menu:
+                    break;
+                case GameState.Game:
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameManager.camera.GetViewMatrix());
+                    gameManager.Draw(spriteBatch);
+                    break;
+                case GameState.Score:
+                    break;
+                default:
+                    break;
+            }
+
+            //spriteBatch.End();
+
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            gameManager.Draw(spriteBatch);
+            //spriteBatch.Begin();
+            //gameManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

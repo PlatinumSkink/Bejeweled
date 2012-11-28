@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="GraphicalObject.cs" />
     <Compile Include="Input.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="JewelHandler.cs" />
     <Compile Include="JewelList.cs" />
     <Compile Include="JewelManager.cs" />
+    <Compile Include="MouseInput.cs" />
     <Compile Include="MovingObject.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
