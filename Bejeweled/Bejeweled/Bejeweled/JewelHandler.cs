@@ -124,44 +124,52 @@ namespace Bejeweled
             }
             if (ms.LeftButton == ButtonState.Pressed && pressedLeft == false)
             {
-                pressedLeft = true;
-                if (NoneFalling())
-                {
-                    Point mousePosition = new Point(ms.X, ms.Y);
-                    selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
-                    //jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
-                    Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
-
-
-                    for (int x = 0; x < jewelLists.Count; x++)
-                    {
-                        for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
-                        {
-                            FoundJewels = new List<Point>();
-                            matchedJewels = 0;
-                            if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
-                            {
-                                CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
-                                if (matchedJewels >= desiredNumber)
-                                {
-                                    RemoveStuff();
-                                    ResetCheck();
-                                    return;
-                                }
-                                else
-                                {
-
-                                }
-                            }
-                        }
-                    }
-                }
-                ResetCheck();
+                
             }
             else if (ms.LeftButton == ButtonState.Released && pressedLeft == true)
             {
                 pressedLeft = false;
             }
+        }
+        public void MouseClick(Point ms)
+        {
+            pressedLeft = true;
+            if (NoneFalling())
+            {
+                Point mousePosition = new Point(ms.X, ms.Y);
+                selectedPlace = new Point(ms.X / jewelSize, (int)WorldSize.Y - 1 - (ms.Y / jewelSize));
+                if (ms.X / jewelSize > jewelLists.Count || ms.X / jewelSize < 0 || (int)WorldSize.Y - 1 - (ms.Y / jewelSize) > jewelLists[0].jewelList.Count || ms.Y / jewelSize < 0)
+                {
+                    return;
+                }
+                jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)].Selected = true;
+                Selected = jewelLists[ms.X / jewelSize].jewelList[(int)WorldSize.Y - 1 - (ms.Y / jewelSize)];
+
+
+                for (int x = 0; x < jewelLists.Count; x++)
+                {
+                    for (int y = (int)WorldSize.Y - 1; y >= 0; y--)
+                    {
+                        FoundJewels = new List<Point>();
+                        matchedJewels = 0;
+                        if (jewelLists[x].jewelList[y].CollisionRectangle().Contains(new Point(ms.X, ms.Y)))
+                        {
+                            CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
+                            if (matchedJewels >= desiredNumber)
+                            {
+                                RemoveStuff();
+                                ResetCheck();
+                                return;
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+            ResetCheck();
         }
         public void CheckCourse()
         {

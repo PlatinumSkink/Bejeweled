@@ -19,7 +19,7 @@ namespace Bejeweled
         public GameManager(Viewport viewport)
         {
             jewelManager = new JewelManager(new Vector2(0, 0));
-            jewelHandler = new JewelHandler(new Vector2(30, 30), 32, 6, 3, new Vector2(0, 0));
+            jewelHandler = new JewelHandler(new Vector2(30, 30), 32, 6, 6, new Vector2(0, 0));
             camera = new Camera(viewport, 
                 new Rectangle(
                     (int)jewelHandler.X, 
@@ -31,7 +31,11 @@ namespace Bejeweled
         {
             //jewelManager.Update(gameTime);
             jewelHandler.Update(gameTime);
-                camera.Position += mi.Movement(camera.viewport.Width, camera.viewport.Height);
+            camera.Position += mi.Update(camera.viewport.Width, camera.viewport.Height);
+            if (mi.Clicked())
+            {
+                jewelHandler.MouseClick(new Point(mi.Position.X + (int)camera.X - (int)camera.Origin.X, mi.Position.Y + (int)camera.Y - (int)camera.Origin.Y));
+            }
         }
         public void Draw(SpriteBatch spriteBatch)
         {

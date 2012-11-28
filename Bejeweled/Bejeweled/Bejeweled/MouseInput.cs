@@ -9,13 +9,37 @@ namespace Bejeweled
 {
     class MouseInput
     {
+        bool clicked = false;
+        Point mousePosition;
+        MouseState ms;
+
+        public Point Position
+        {
+            get { return mousePosition; }
+            set { mousePosition = value; }
+        }
+
         public MouseInput()
         {
 
         }
-        public Vector2 Movement(int Width, int Height)
+        public bool Clicked()
         {
-            MouseState ms = Mouse.GetState();
+            if (ms.LeftButton == ButtonState.Pressed && clicked == false)
+            {
+                clicked = true;
+                return true;
+            }
+            if (clicked == true && ms.LeftButton == ButtonState.Released)
+            {
+                clicked = false;
+            }
+            return false;
+        }
+        public Vector2 Update(int Width, int Height)
+        {
+            ms = Mouse.GetState();
+            Position = new Point(ms.X, ms.Y);
             Vector2 mousePosition = new Vector2(ms.X, ms.Y);
             Vector2 targetVector = Vector2.Zero;
             if (ms.X < Width / 10) 
