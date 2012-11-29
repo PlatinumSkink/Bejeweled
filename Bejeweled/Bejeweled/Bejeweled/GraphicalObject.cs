@@ -36,7 +36,7 @@ namespace Bejeweled
             return new Rectangle((int)X, (int)Y, Width, Height);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, CollisionRectangle(), color);
         }

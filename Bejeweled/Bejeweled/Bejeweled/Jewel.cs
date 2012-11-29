@@ -74,6 +74,14 @@ namespace Bejeweled
             {
                 Name = "Star";
             }
+            else if (randomJewel == 6)
+            {
+                Name = "Tunnel";
+            }
+            else if (randomJewel == 7)
+            {
+                Name = "Clover";
+            }
             Load(Name);
         }
     }

@@ -24,6 +24,7 @@ namespace Bejeweled
         bool selected = false;
 
         bool Checkie = true;
+        bool first = true;
 
         public Vector2 WorldSize;
         public int jewelSize = 32;
@@ -38,6 +39,10 @@ namespace Bejeweled
         int desiredNumber = 3;
 
         GraphicalObject SelectMarker;
+
+        int score = 0;
+
+        public int Score { get; set; }
 
         public JewelHandler(Vector2 _WorldSize, int _jewelSize, byte _numberOfJewels, int _desiredNumber, Vector2 _position)
             : base(_position)
@@ -105,15 +110,29 @@ namespace Bejeweled
             {
                 /*if (NoneFalling())
                 {*/
-                //for (int i = 0; i < 10; i++)
-                //{
-                    CheckCourse();
-                    //}
-                    ResetCheck();
+
+                if (first == true)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        CheckCourse();
+                        ResetCheck();
+                    }
+                }
+                else
+                {
+                    if (NoneFalling())
+                    {
+                        CheckCourse();
+                        ResetCheck();
+                    }
+                }
+                    
                 //}
                 if (NoneFalling())
                 {
                     Checkie = false;
+                    first = false;
                 }
             }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
@@ -166,6 +185,11 @@ namespace Bejeweled
                                 CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
                                 if (matchedJewels >= desiredNumber)
                                 {
+                                    if (first == false)
+                                    {
+                                        Score += (int)Math.Pow(2, ((matchedJewels - 2) * (matchedJewels - 2)));
+                                        Console.WriteLine(Score);
+                                    }
                                     RemoveStuff();
                                     ResetCheck();
                                     return;
@@ -219,6 +243,11 @@ namespace Bejeweled
                     CheckAround(jewelLists[x], jewelLists[x].jewelList[y]);
                     if (matchedJewels >= desiredNumber)
                     {
+                        if (first == false)
+                        {
+                            Score += (int)Math.Pow(2, ((matchedJewels - 2) * 2));
+                            Console.WriteLine(Score);
+                        }
                         RemoveStuff();
                         ResetCheck();
                         return;

@@ -19,13 +19,16 @@ namespace Bejeweled
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        public static bool exit = false;
+
         GameManager gameManager;
 
         enum GameState
         {
             Menu,
             Game,
-            Score
+            Score,
+            Quit
         }
         GameState gameState = GameState.Game;
 
@@ -82,6 +85,10 @@ namespace Bejeweled
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (exit == true)
+            {
+                this.Exit();
+            }
 
             gameManager.Update(gameTime);
             // TODO: Add your update logic here
@@ -104,6 +111,9 @@ namespace Bejeweled
                 case GameState.Game:
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameManager.camera.GetViewMatrix());
                     gameManager.Draw(spriteBatch);
+                    spriteBatch.End();
+                    spriteBatch.Begin();
+                    gameManager.UIDraw(spriteBatch);
                     break;
                 case GameState.Score:
                     break;
