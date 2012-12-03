@@ -20,6 +20,10 @@ namespace Bejeweled
         SpriteBatch spriteBatch;
 
         public static bool exit = false;
+        public static int jewels = 8;
+        public static int width = 50;
+        public static int height = 50;
+        public static bool newGame = false;
 
         GameManager gameManager;
         MenuManager menuManager;
@@ -31,7 +35,7 @@ namespace Bejeweled
             Score,
             Quit
         }
-        GameState gameState = GameState.Game;
+        GameState gameState = GameState.Menu;
 
         public Main()
         {
@@ -62,7 +66,7 @@ namespace Bejeweled
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Position.content = Content;
 
-            gameManager = new GameManager(graphics.GraphicsDevice.Viewport);
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10);
             menuManager = new MenuManager();
             // TODO: use this.Content to load your game content here
         }
@@ -86,6 +90,12 @@ namespace Bejeweled
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+            if (newGame == true)
+            {
+                gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels);
+                newGame = false;
+            }
 
             if (exit == true)
             {
@@ -111,6 +121,11 @@ namespace Bejeweled
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+        }
+
+        public void EnterGameData(int jewels, int width, int height)
+        {
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels);
         }
 
         /// <summary>

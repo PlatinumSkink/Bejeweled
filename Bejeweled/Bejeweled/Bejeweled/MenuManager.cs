@@ -14,6 +14,8 @@ namespace Bejeweled
         int chosenHeight = 30;
         int chosenJewels = 6;
 
+        List<int> chosenValues = new List<int>();
+
         List<TextClass> input = new List<TextClass>();
 
         bool PlacedText = false;
@@ -25,6 +27,8 @@ namespace Bejeweled
         List<Button> recommendations = new List<Button>();
         MouseInput mi = new MouseInput();
 
+        byte changedValue = 0;
+
         enum ValueChanging { Jewels, Lines, Rows }
 
         ValueChanging valueToChange = ValueChanging.Jewels;
@@ -35,6 +39,7 @@ namespace Bejeweled
 
         public MenuManager()
         {
+  
             Construct();
         }
         public void Construct()
@@ -51,6 +56,10 @@ namespace Bejeweled
                 option.PlaceText(option.textOn.Text);
             }
             PlacedText = true;
+            chosenValues = new List<int>();
+            chosenValues.Add(chosenJewels);
+            chosenValues.Add(chosenWidth);
+            chosenValues.Add(chosenHeight);
         }
         public void Update(GameTime gameTime)
         {
@@ -58,11 +67,12 @@ namespace Bejeweled
             {
                 foreach (var text in input)
                 {
-                    
+
                 }
                 input[0].Text = "< " + chosenJewels + " >";
                 input[1].Text = "< " + chosenWidth + " >";
                 input[2].Text = "< " + chosenHeight + " >";
+                
             }
             if (mi.Clicked() == true)
             {
@@ -84,70 +94,137 @@ namespace Bejeweled
                         }
                         else if (option.textOn.Text == "Jewels")
                         {
-
+                            changedValue = 0;
+                            valueToChange = ValueChanging.Jewels;
                         }
                         else if (option.textOn.Text == "Lines")
                         {
-
+                            changedValue = 1;
+                            valueToChange = ValueChanging.Lines;
                         }
                         else if (option.textOn.Text == "Rows")
                         {
-
+                            changedValue = 2;
+                            valueToChange = ValueChanging.Rows;
                         }
                         else if (option.textOn.Text == "Enter_Data")
                         {
-
+                            Enter();
                         }
                         else if (option.textOn.Text == "Back")
                         {
                             Back();
                         }
-                        else if (option.textOn.Text == "Basic")
+                        else if (option.textOn.Text == "Play Game")
+                        {
+
+                        }
+                        else if (option.textOn.Text == "Play Game")
+                        {
+
+                        }
+                        else if (option.textOn.Text == "Play Game")
+                        {
+
+                        }
+                        else if (option.textOn.Text == "Play Game")
+                        {
+
+                        }
+                        return;
+                    }
+                }
+                foreach (Button recommendation in recommendations)
+                {
+                    if (recommendation.ClickedOn(true, mi.Position))
+                    {
+                        if (recommendation.textOn.Text == "Basic")
                         {
                             Recommendation(6, 10, 10);
                         }
-                        else if (option.textOn.Text == "Large")
+                        else if (recommendation.textOn.Text == "Large")
                         {
                             Recommendation(8, 25, 25);
                         }
-                        else if (option.textOn.Text == "Huge")
+                        else if (recommendation.textOn.Text == "Huge")
                         {
                             Recommendation(10, 50, 50);
                         }
-                        else if (option.textOn.Text == "Tower")
+                        else if (recommendation.textOn.Text == "Tower")
                         {
                             Recommendation(8, 10, 40);
                         }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
+                        return;
                     }
                 }
+                if (inputingData == true)
+                {
+                    CheckClick();
+                }
             }
+        }
+        public void CheckClick()
+        {
+            /*if (mi.Clicked())
+            {*/
+                if (mi.Position.X > input[0].X + 30)
+                {
+                    switch (valueToChange)
+                    {
+                        case ValueChanging.Jewels:
+                            chosenJewels++;
+                            break;
+                        case ValueChanging.Lines:
+                            chosenWidth++;
+                            break;
+                        case ValueChanging.Rows:
+                            chosenHeight++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (valueToChange)
+                    {
+                        case ValueChanging.Jewels:
+                            chosenJewels--;
+                            break;
+                        case ValueChanging.Lines:
+                            chosenWidth--;
+                            break;
+                        case ValueChanging.Rows:
+                            chosenHeight--;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                 
+               /*     chosenValues[changedValue] += 1;
+                }
+                else
+                {
+                    chosenValues[changedValue] -= 1;
+                }*/
+            //}
         }
         public void Back()
         {
             inputingData = false;
             options = new List<Button>();
             input = new List<TextClass>();
+            recommendations = new List<Button>();
             Construct();
         }
         public void Enter()
         {
             buttonPressed = GameState.Play;
+            Main.jewels = chosenJewels;
+            Main.width = chosenWidth;
+            Main.height = chosenHeight;
+            Main.newGame = true;
         }
         public void Play_Game()
         {

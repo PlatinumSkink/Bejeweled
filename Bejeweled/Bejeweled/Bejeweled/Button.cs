@@ -23,7 +23,7 @@ namespace Bejeweled
         }
         public bool ClickedOn(bool clicked, Point mousePosition)
         {
-            if (CollisionRectangle().Contains(mousePosition) == true && clickedOn == false && clicked == true)
+            if (CollisionRectangle().Contains(mousePosition) == true/* && clickedOn == false*/ && clicked == true)
             {
                 clickedOn = true;
                 return true;

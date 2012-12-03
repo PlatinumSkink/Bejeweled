@@ -20,10 +20,10 @@ namespace Bejeweled
 
         public int score = 0;
 
-        public GameManager(Viewport viewport)
+        public GameManager(Viewport viewport, Vector2 WorldSize, int jewels)
         {
             jewelManager = new JewelManager(new Vector2(0, 0));
-            jewelHandler = new JewelHandler(new Vector2(50, 50), 32, 10, 3, new Vector2(0, 0));
+            jewelHandler = new JewelHandler(WorldSize, 32, (byte)jewels, 3, new Vector2(0, 0));
             camera = new Camera(viewport, 
                 new Rectangle(
                     (int)jewelHandler.X, 
