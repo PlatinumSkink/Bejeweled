@@ -82,6 +82,14 @@ namespace Bejeweled
             {
                 Name = "Clover";
             }
+            else if (randomJewel == 8)
+            {
+                Name = "Pokey";
+            }
+            else if (randomJewel == 9)
+            {
+                Name = "Shuriken";
+            }
             Load(Name);
         }
     }

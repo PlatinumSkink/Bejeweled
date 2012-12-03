@@ -15,7 +15,12 @@ namespace Bejeweled
 
         public Point Position
         {
-            get { return mousePosition; }
+            //get { return mousePosition; }
+            //set { mousePosition = value; }
+            get { 
+                ms = Mouse.GetState();
+                return new Point(ms.X, ms.Y); 
+            }
             set { mousePosition = value; }
         }
 
@@ -25,6 +30,7 @@ namespace Bejeweled
         }
         public bool Clicked()
         {
+            ms = Mouse.GetState();
             if (ms.LeftButton == ButtonState.Pressed && clicked == false)
             {
                 clicked = true;

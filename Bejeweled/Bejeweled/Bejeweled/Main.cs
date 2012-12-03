@@ -22,6 +22,7 @@ namespace Bejeweled
         public static bool exit = false;
 
         GameManager gameManager;
+        MenuManager menuManager;
 
         enum GameState
         {
@@ -62,6 +63,7 @@ namespace Bejeweled
             Position.content = Content;
 
             gameManager = new GameManager(graphics.GraphicsDevice.Viewport);
+            menuManager = new MenuManager();
             // TODO: use this.Content to load your game content here
         }
 
@@ -90,7 +92,22 @@ namespace Bejeweled
                 this.Exit();
             }
 
-            gameManager.Update(gameTime);
+            switch (gameState)
+            {
+                case GameState.Game:
+                    gameManager.Update(gameTime);
+                    break;
+                case GameState.Menu:
+                    menuManager.Update(gameTime);
+                    gameState = (GameState)menuManager.CheckState();
+                    break;
+                case GameState.Score:
+                    break;
+                case GameState.Quit:
+                    break;
+                default:
+                    break;
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -107,6 +124,8 @@ namespace Bejeweled
             switch (gameState)
             {
                 case GameState.Menu:
+                    spriteBatch.Begin();
+                    menuManager.Draw(spriteBatch);
                     break;
                 case GameState.Game:
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameManager.camera.GetViewMatrix());

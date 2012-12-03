@@ -12,6 +12,7 @@ namespace Bejeweled
         public string Text { get; set; }
         public SpriteFont Font { get; set; }
         public Color Color { get; set; }
+        public int Number { get; set; }
         public TextClass(string _text, string _font, Color _color, Vector2 _position)
             : base(_position)
         {

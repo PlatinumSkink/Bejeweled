@@ -14,7 +14,12 @@ namespace Bejeweled
         public Button(string text, string _textureName, Vector2 _position)
             : base(_textureName, _position)
         {
-            textOn = new TextClass(text, "SegoeUIMono", Color.White, new Vector2(Pos.X + 10, Pos.Y + 10));
+            textOn = new TextClass(text, "SegoeUIMono", Color.White, new Vector2(X + 10, Y + 10));
+            PlaceText(text);
+        }
+        public void PlaceText(string text)
+        {
+            textOn = new TextClass(text, "SegoeUIMono", Color.White, new Vector2(X + 10, Y + 10));
         }
         public bool ClickedOn(bool clicked, Point mousePosition)
         {
