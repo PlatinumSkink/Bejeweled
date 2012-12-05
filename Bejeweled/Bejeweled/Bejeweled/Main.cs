@@ -19,14 +19,13 @@ namespace Bejeweled
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public static bool exit = false;
-        public static int jewels = 8;
-        public static int width = 50;
-        public static int height = 50;
-        public static bool newGame = false;
+        HighScoreClass highScore;
 
+        public static bool exit = false;
+        
         GameManager gameManager;
         MenuManager menuManager;
+        ScoreManager scoreManager;
 
         enum GameState
         {
@@ -42,6 +41,7 @@ namespace Bejeweled
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            this.Window.Title = "Bejeweled - Niklas Cullberg";
         }
 
         /// <summary>
@@ -65,9 +65,17 @@ namespace Bejeweled
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Position.content = Content;
+            Position.ScreenWidth = graphics.GraphicsDevice.Viewport.Width;
+            Position.ScreenHeight = graphics.GraphicsDevice.Viewport.Height;
 
-            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10);
+            highScore = new HighScoreClass(Content);
+
+            highScore.LoadScores();
+            highScore.SetScores();
+
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10, 100);
             menuManager = new MenuManager();
+            scoreManager = new ScoreManager(highScore, Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -91,10 +99,17 @@ namespace Bejeweled
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (newGame == true)
+            if (WorldVariables.newGame == true)
             {
-                gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels);
-                newGame = false;
+                gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(WorldVariables.width, WorldVariables.height), WorldVariables.jewels, WorldVariables.time);
+                menuManager = new MenuManager();
+                scoreManager.inputName = true;
+                WorldVariables.newGame = false;
+            }
+            if (WorldVariables.transfer == true)
+            {
+                scoreManager.currentScore = WorldVariables.score;
+                WorldVariables.transfer = false;
             }
 
             if (exit == true)
@@ -106,14 +121,30 @@ namespace Bejeweled
             {
                 case GameState.Game:
                     gameManager.Update(gameTime);
+                    gameState = (GameState)gameManager.CheckState();
+                    if (gameState != GameState.Game)
+                    {
+                        gameManager.ResetState();
+                    }
                     break;
                 case GameState.Menu:
                     menuManager.Update(gameTime);
                     gameState = (GameState)menuManager.CheckState();
+                    if (gameState != GameState.Menu)
+                    {
+                        menuManager.ResetState();
+                    }
                     break;
                 case GameState.Score:
+                    scoreManager.Update(gameTime);
+                    gameState = (GameState)scoreManager.CheckState();
+                    if (gameState != GameState.Score)
+                    {
+                        scoreManager.ResetState();
+                    }
                     break;
                 case GameState.Quit:
+                    exit = true;
                     break;
                 default:
                     break;
@@ -123,9 +154,9 @@ namespace Bejeweled
             base.Update(gameTime);
         }
 
-        public void EnterGameData(int jewels, int width, int height)
+        public void EnterGameData(int jewels, int width, int height, int time)
         {
-            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels);
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels, time);
         }
 
         /// <summary>
@@ -143,6 +174,9 @@ namespace Bejeweled
                     menuManager.Draw(spriteBatch);
                     break;
                 case GameState.Game:
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+                    gameManager.ParallaxDraw(spriteBatch);
+                    spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameManager.camera.GetViewMatrix());
                     gameManager.Draw(spriteBatch);
                     spriteBatch.End();
@@ -150,6 +184,11 @@ namespace Bejeweled
                     gameManager.UIDraw(spriteBatch);
                     break;
                 case GameState.Score:
+                    spriteBatch.Begin();
+                    scoreManager.Draw(spriteBatch);
+                    break;
+                case GameState.Quit:
+                    spriteBatch.Begin();
                     break;
                 default:
                     break;

@@ -10,7 +10,7 @@ namespace Bejeweled
 {
     class GraphicalObject:Position
     {
-        Texture2D texture;
+        protected Texture2D texture;
         protected Color color = Color.White;
         
         public GraphicalObject(string _textureName, Vector2 _position)

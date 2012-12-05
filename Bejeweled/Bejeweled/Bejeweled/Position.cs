@@ -12,6 +12,8 @@ namespace Bejeweled
     {
         Vector2 position;
         public static ContentManager content;
+        public static int ScreenWidth;
+        public static int ScreenHeight;
 
         public Position(Vector2 _position)
         {

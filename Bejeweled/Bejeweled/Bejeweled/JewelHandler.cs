@@ -42,7 +42,14 @@ namespace Bejeweled
 
         int score = 0;
 
-        public int Score { get; set; }
+        public int Score { 
+            get { return score; }
+            set 
+            {
+                WorldVariables.score = value;
+                score = value;
+            } 
+        }
 
         public JewelHandler(Vector2 _WorldSize, int _jewelSize, byte _numberOfJewels, int _desiredNumber, Vector2 _position)
             : base(_position)

@@ -13,6 +13,7 @@ namespace Bejeweled
         int chosenWidth = 30;
         int chosenHeight = 30;
         int chosenJewels = 6;
+        int chosenTime = 100;
 
         List<int> chosenValues = new List<int>();
 
@@ -20,7 +21,7 @@ namespace Bejeweled
 
         bool PlacedText = false;
 
-        bool inputingData = false;
+        public bool inputingData = false;
 
         List<Button> options = new List<Button>();
         List<Button> arrows = new List<Button>();
@@ -29,11 +30,11 @@ namespace Bejeweled
 
         byte changedValue = 0;
 
-        enum ValueChanging { Jewels, Lines, Rows }
+        enum ValueChanging { Jewels, Lines, Rows, Time }
 
         ValueChanging valueToChange = ValueChanging.Jewels;
 
-        public enum GameState { Menu, Play, Score, Quit }
+        public enum GameState { Menu, Game, Score, Quit }
 
         GameState buttonPressed = GameState.Menu;
 
@@ -60,6 +61,7 @@ namespace Bejeweled
             chosenValues.Add(chosenJewels);
             chosenValues.Add(chosenWidth);
             chosenValues.Add(chosenHeight);
+            chosenValues.Add(chosenTime);
         }
         public void Update(GameTime gameTime)
         {
@@ -69,10 +71,14 @@ namespace Bejeweled
                 {
 
                 }
-                input[0].Text = "< " + chosenJewels + " >";
+                for (int i = 0; i < chosenValues.Count; i++)
+                {
+                    input[i].Text = "< " + chosenValues[i] + " >";
+                }
+                /*input[0].Text = "< " + chosenJewels + " >";
                 input[1].Text = "< " + chosenWidth + " >";
                 input[2].Text = "< " + chosenHeight + " >";
-                
+                input[3].Text = "< " + chosenTime + " >";*/
             }
             if (mi.Clicked() == true)
             {
@@ -107,17 +113,19 @@ namespace Bejeweled
                             changedValue = 2;
                             valueToChange = ValueChanging.Rows;
                         }
+                        else if (option.textOn.Text == "Time")
+                        {
+                            changedValue = 3;
+                            valueToChange = ValueChanging.Time;
+                        }
                         else if (option.textOn.Text == "Enter_Data")
                         {
+                            inputingData = false;
                             Enter();
                         }
                         else if (option.textOn.Text == "Back")
                         {
                             Back();
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
                         }
                         else if (option.textOn.Text == "Play Game")
                         {
@@ -138,22 +146,40 @@ namespace Bejeweled
                 {
                     if (recommendation.ClickedOn(true, mi.Position))
                     {
+                        int[] values = new int[4];
                         if (recommendation.textOn.Text == "Basic")
                         {
-                            Recommendation(6, 10, 10);
+                            //6, 10, 10, 60;
+                            values[0] = 6;
+                            values[1] = 10;
+                            values[2] = 10;
+                            values[3] = 60;
                         }
                         else if (recommendation.textOn.Text == "Large")
                         {
-                            Recommendation(8, 25, 25);
+                            //values = new int[8, 25, 25, 80];
+                            values[0] = 8;
+                            values[1] = 25;
+                            values[2] = 25;
+                            values[3] = 80;
                         }
                         else if (recommendation.textOn.Text == "Huge")
                         {
-                            Recommendation(10, 50, 50);
+                            //values = new int[10, 50, 50, 100];
+                            values[0] = 10;
+                            values[1] = 50;
+                            values[2] = 50;
+                            values[3] = 100;
                         }
                         else if (recommendation.textOn.Text == "Tower")
                         {
-                            Recommendation(8, 10, 40);
+                            //values = new int[8, 10, 40, 80];
+                            values[0] = 8;
+                            values[1] = 10;
+                            values[2] = 40;
+                            values[3] = 80;
                         }
+                        Recommendation(values);
                         return;
                     }
                 }
@@ -169,7 +195,7 @@ namespace Bejeweled
             {*/
                 if (mi.Position.X > input[0].X + 30)
                 {
-                    switch (valueToChange)
+                    /*switch (valueToChange)
                     {
                         case ValueChanging.Jewels:
                             chosenJewels++;
@@ -180,13 +206,17 @@ namespace Bejeweled
                         case ValueChanging.Rows:
                             chosenHeight++;
                             break;
+                        case ValueChanging.Time:
+                            chosenTime++;
+                            break;
                         default:
                             break;
-                    }
+                    }*/
+                    chosenValues[changedValue]++;
                 }
                 else
                 {
-                    switch (valueToChange)
+                    /*switch (valueToChange)
                     {
                         case ValueChanging.Jewels:
                             chosenJewels--;
@@ -197,9 +227,13 @@ namespace Bejeweled
                         case ValueChanging.Rows:
                             chosenHeight--;
                             break;
+                        case ValueChanging.Time:
+                            chosenTime--;
+                            break;
                         default:
                             break;
-                    }
+                    }*/
+                    chosenValues[changedValue]--;
                 }
                  
                /*     chosenValues[changedValue] += 1;
@@ -220,11 +254,12 @@ namespace Bejeweled
         }
         public void Enter()
         {
-            buttonPressed = GameState.Play;
-            Main.jewels = chosenJewels;
-            Main.width = chosenWidth;
-            Main.height = chosenHeight;
-            Main.newGame = true;
+            buttonPressed = GameState.Game;
+            WorldVariables.jewels = chosenValues[0];
+            WorldVariables.width = chosenValues[1];
+            WorldVariables.height = chosenValues[2];
+            WorldVariables.time = chosenValues[3];
+            WorldVariables.newGame = true;
         }
         public void Play_Game()
         {
@@ -232,6 +267,7 @@ namespace Bejeweled
             options.Add(new Button("Jewels", "Button", Vector2.Zero));
             options.Add(new Button("Lines", "Button", Vector2.Zero));
             options.Add(new Button("Rows", "Button", Vector2.Zero));
+            options.Add(new Button("Time", "Button", Vector2.Zero));
             options.Add(new Button("Enter_Data", "Button", Vector2.Zero));
             options.Add(new Button("Back", "Button", Vector2.Zero));
             recommendations.Add(new Button("Basic", "Button", Vector2.Zero));
@@ -249,9 +285,13 @@ namespace Bejeweled
                 recommendations[i].PlaceText(recommendations[i].textOn.Text);
             }
             PlacedText = true;
-            input.Add(new TextClass(chosenJewels.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
+            for (int i = 0; i < chosenValues.Count; i++)
+            {
+                input.Add(new TextClass(chosenValues[i].ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
+            }
+             /*   input.Add(new TextClass(chosenJewels.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
             input.Add(new TextClass(chosenWidth.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
-            input.Add(new TextClass(chosenHeight.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
+            input.Add(new TextClass(chosenHeight.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));*/
             for (int i = 0; i < input.Count; i++)
             {
                 input[i].Pos = new Vector2(300, 100 + 60 * i);
@@ -267,15 +307,24 @@ namespace Bejeweled
             Main.exit = true;
             buttonPressed = GameState.Quit;
         }
-        public void Recommendation(int _jewels, int _width, int _height)
+        public void Recommendation(int[] _values/*, int _jewels, int _width, int _height, int _time*/)
         {
-            chosenJewels = _jewels;
-            chosenWidth = _width;
-            chosenHeight = _height;
+            for (int i = 0; i < _values.Length; i++)
+            {
+                chosenValues[i] = _values[i];
+            }
+            /*chosenValues[0] = _jewels;
+            chosenValues[1] = _width;
+            chosenValues[2] = _height;
+            chosenValues[3] = _time;*/
         }
         public GameState CheckState()
         {
             return buttonPressed;
+        }
+        public void ResetState()
+        {
+            buttonPressed = GameState.Menu;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
