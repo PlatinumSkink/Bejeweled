@@ -28,6 +28,7 @@ namespace Bejeweled
         {
 
         }
+        //If the mouse is clicked, return true. But prevent returning true more than once unless mousebutton is released.
         public bool Clicked()
         {
             ms = Mouse.GetState();
@@ -42,6 +43,7 @@ namespace Bejeweled
             }
             return false;
         }
+        //Same as above, except without the preventing and only the check if it is actually pressed.
         public bool IsMouseClicked()
         {
             ms = Mouse.GetState();
@@ -51,6 +53,7 @@ namespace Bejeweled
             }
             return false;
         }
+        //Update. Checks where the mouse is, and returns a Vector2 for the camera to move when mouse is close to borders.
         public Vector2 Update(int Width, int Height)
         {
             ms = Mouse.GetState();

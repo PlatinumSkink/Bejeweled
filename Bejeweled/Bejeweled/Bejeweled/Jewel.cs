@@ -15,18 +15,20 @@ namespace Bejeweled
 
         public bool up = false;
 
-        public bool Selected = false;
-
+        //The jewel is an object that can move and be randomized. The number for the random jewel is sent along.
         public Jewel(string _textureName, Vector2 _position, int randomJewel, bool _Checked)
             : base(_textureName, _position, 0, 2, new Vector2(0, 1))
         {
             RandomJewel(randomJewel);
+            //Checked is to see if this one appears as the result of a checking of other jewels. Which means it appears in mid-air.
             Checked = _Checked;
             if (Checked == true)
             {
                 falling = true;
             }
         }
+        //Update the jewel. If falling, the acceleration is constant. Otherwise stop the thing.
+        //We still use the moving code in the MovingObject class.
         public override void Update(GameTime gameTime)
         {
             if (falling == true)
@@ -38,16 +40,9 @@ namespace Bejeweled
                 acceleration = 0;
                 speed = 0;
             }
-            if (Selected == true)
-            {
-                color = Color.Red;
-            }
-            else
-            {
-                color = Color.White;
-            }
             base.Update(gameTime);
         }
+        //Depending on what number was recieved for the random jewel, load a different texture.
         public void RandomJewel(int randomJewel)
         {
             if (randomJewel == 0)

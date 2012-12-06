@@ -10,6 +10,8 @@ namespace Bejeweled
 {
     class JewelManager
     {
+        //Old data. Ignore this class. It only still lives for sentimental values.
+
         List<List<Jewel>> JewelLines = new List<List<Jewel>>();
         //List<Jewel> jewels = new List<Jewel>();
         List<Point> directions = new List<Point>();

@@ -83,11 +83,11 @@ namespace Bejeweled
             }
             foreach (Button option in options)
             {
-                option.Update(isMiPressed, mi.IsMouseClicked() == false, mi.Position);
+                option.Update(isMiPressed, mi.IsMouseClicked() == false);
             }
             foreach (Button recommendation in recommendations)
             {
-                recommendation.Update(isMiPressed, mi.IsMouseClicked() == false, mi.Position);
+                recommendation.Update(isMiPressed, mi.IsMouseClicked() == false);
             }
             if (isMiPressed == true)
             {
@@ -135,18 +135,6 @@ namespace Bejeweled
                         else if (option.textOn.Text == "Back")
                         {
                             Back();
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
-                        }
-                        else if (option.textOn.Text == "Play Game")
-                        {
-
                         }
                         return;
                     }

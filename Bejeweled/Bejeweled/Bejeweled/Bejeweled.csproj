@@ -114,7 +114,6 @@
     <Compile Include="GameUI.cs" />
     <Compile Include="GraphicalObject.cs" />
     <Compile Include="HighScoreClass.cs" />
-    <Compile Include="Input.cs" />
     <Compile Include="Jewel.cs" />
     <Compile Include="JewelHandler.cs" />
     <Compile Include="JewelList.cs" />

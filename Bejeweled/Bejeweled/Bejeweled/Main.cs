@@ -64,15 +64,18 @@ namespace Bejeweled
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Sends data to my super-class for all to use.
             Position.content = Content;
             Position.ScreenWidth = graphics.GraphicsDevice.Viewport.Width;
             Position.ScreenHeight = graphics.GraphicsDevice.Viewport.Height;
 
+            //Create and load my High Scores.
             highScore = new HighScoreClass(Content);
-
             highScore.LoadScores();
             highScore.SetScores();
 
+            //Create my managers.
             gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10, 100);
             menuManager = new MenuManager();
             scoreManager = new ScoreManager(highScore, Content);
@@ -99,6 +102,7 @@ namespace Bejeweled
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            //If a new game is declared, recreate managers from the data in the WorldVariables.
             if (WorldVariables.newGame == true)
             {
                 gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(WorldVariables.width, WorldVariables.height), WorldVariables.jewels, WorldVariables.time);
@@ -106,17 +110,20 @@ namespace Bejeweled
                 scoreManager.inputName = true;
                 WorldVariables.newGame = false;
             }
+            //If a transfer is declared, add the score from WorldVariables to the ScoreManager.
             if (WorldVariables.transfer == true)
             {
                 scoreManager.currentScore = WorldVariables.score;
                 WorldVariables.transfer = false;
             }
 
+            //If we want to exit the game, exit the game.
             if (exit == true)
             {
                 this.Exit();
             }
 
+            //Depending on which state is on, update a different manager and check the state of each. If a new one is found, reset the past one.
             switch (gameState)
             {
                 case GameState.Game:
@@ -154,6 +161,7 @@ namespace Bejeweled
             base.Update(gameTime);
         }
 
+        //When custom data has been inputed in the menu, this function will be used to create a manager with this data.
         public void EnterGameData(int jewels, int width, int height, int time)
         {
             gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels, time);
@@ -174,6 +182,7 @@ namespace Bejeweled
                     menuManager.Draw(spriteBatch);
                     break;
                 case GameState.Game:
+                    //The game needs differend spriteBatches for parallax, camera and UI. So three in a row for them...
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
                     gameManager.ParallaxDraw(spriteBatch);
                     spriteBatch.End();

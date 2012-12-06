@@ -9,28 +9,9 @@ namespace Bejeweled
 {
     class ParallaxObject : GraphicalObject
     {
-        public Texture2D Texture;
-        //public Vector2 Position;
-
         Vector2 parallaxVector = Vector2.Zero;
 
-        public float parallelX = 0;
-        public float parallaxY = 0;
-
-        public Rectangle LimitRectangle { get; set; }
-
-        /*public Vector2 ParPos
-        {
-            get { return parallaxVector; }
-            set { 
-                parallaxVector = value; 
-                if (LimitRectangle != null)
-                {
-                    parallaxVector.X = MathHelper.Clamp(parallaxVector.X, ((Rectangle)LimitRectangle).X, ((Rectangle)LimitRectangle).Width/* - viewport.Width*//*);
-                    parallaxVector.Y = MathHelper.Clamp(parallaxVector.Y, ((Rectangle)LimitRectangle).Y, ((Rectangle)LimitRectangle).Height/* - viewport.Height*//*);
-                }
-            }
-        }*/
+        //Returning data for all the positions of the paralax.
         public Vector2 ParPos
         {
             get { return parallaxVector; }
@@ -46,6 +27,8 @@ namespace Bejeweled
             get { return parallaxVector.Y; }
             set { parallaxVector.Y = value; }
         }
+
+        //No real difference to a Graphical Object like this.
         public ParallaxObject(string _textureName, Vector2 _position)
             : base(_textureName, _position)
         {
@@ -53,14 +36,16 @@ namespace Bejeweled
         }
         public void Update()
         {
-            //parallaxVector.X++;
+
         }
 
+        //Only a... slightly larger box.
         public Rectangle box()
         {
-            return new Rectangle((int)X, (int)Y, Width * 13, Height * 8);
+            return new Rectangle((int)X, (int)Y, ScreenWidth, ScreenHeight);
         }
 
+        //Special draw function for the parallax.
         public void DrawParllex(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, 
@@ -68,13 +53,9 @@ namespace Bejeweled
                 new Rectangle(
                     (int)(parallaxVector.X * 1.0f),
                     (int)(parallaxVector.Y * 1.0f),
-                    Width * 13, 
-                    Height * 8), 
+                    ScreenWidth, 
+                    ScreenHeight), 
                Color.White);
-        }
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Texture, box(), Color.White);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Bejeweled
 
         Rectangle? Limit { get; set; }
 
+        //The camera has a position. This position is restricted to the playing field by clamping with the limit-rectangle.
         public Vector2 Position
         {
             get { return cameraPosition; }
@@ -32,6 +33,7 @@ namespace Bejeweled
                 }
             }
         }
+        //For individual use, the X and Y of the camera has been seperated into seperate functions. Just in case.
         public float X
         {
             get { return cameraPosition.X; }
@@ -54,6 +56,7 @@ namespace Bejeweled
                 }
             }
         }
+        //The camera simply needs the viewport (the stage) and a limitrectangle. 
         public Camera(Viewport _viewport, Rectangle? _limitRectangle)
         {
             viewport = _viewport;
@@ -62,6 +65,7 @@ namespace Bejeweled
             Zoom = 1f;
             Rotation = 0f;
         }
+        //This function retrieves the data from the camera.
         public Matrix GetViewMatrix()
         {
             return Matrix.CreateTranslation(new Vector3(-Position, 0f))
