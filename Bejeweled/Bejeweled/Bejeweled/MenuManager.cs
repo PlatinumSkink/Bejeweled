@@ -65,6 +65,7 @@ namespace Bejeweled
         }
         public void Update(GameTime gameTime)
         {
+            bool isMiPressed = mi.Clicked();
             if (inputingData == true)
             {
                 foreach (var text in input)
@@ -80,11 +81,19 @@ namespace Bejeweled
                 input[2].Text = "< " + chosenHeight + " >";
                 input[3].Text = "< " + chosenTime + " >";*/
             }
-            if (mi.Clicked() == true)
+            foreach (Button option in options)
+            {
+                option.Update(isMiPressed, mi.IsMouseClicked() == false, mi.Position);
+            }
+            foreach (Button recommendation in recommendations)
+            {
+                recommendation.Update(isMiPressed, mi.IsMouseClicked() == false, mi.Position);
+            }
+            if (isMiPressed == true)
             {
                 foreach (Button option in options)
                 {
-                    if (option.ClickedOn(true, mi.Position))
+                    if (option.ClickedOn(isMiPressed, mi.Position))
                     {
                         if (option.textOn.Text == "Play Game")
                         {
@@ -144,7 +153,7 @@ namespace Bejeweled
                 }
                 foreach (Button recommendation in recommendations)
                 {
-                    if (recommendation.ClickedOn(true, mi.Position))
+                    if (recommendation.ClickedOn(isMiPressed, mi.Position))
                     {
                         int[] values = new int[4];
                         if (recommendation.textOn.Text == "Basic")
@@ -281,7 +290,7 @@ namespace Bejeweled
             }
             for (int i = 0; i < recommendations.Count; i++)
             {
-                recommendations[i].Pos = new Vector2(100 + 100 * i, 50);
+                recommendations[i].Pos = new Vector2(100 + 140 * i, 50);
                 recommendations[i].PlaceText(recommendations[i].textOn.Text);
             }
             PlacedText = true;

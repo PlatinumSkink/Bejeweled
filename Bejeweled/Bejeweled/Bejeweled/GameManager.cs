@@ -67,13 +67,17 @@ namespace Bejeweled
 
             gameUI.UpdateScore(jewelHandler.Score);
             gameUI.UpdateTimer(gameTimer.TimeRemaining());
+            
             if (mi.Clicked())
             {
                 jewelHandler.MouseClick(new Point(mi.Position.X + (int)camera.X - (int)camera.Origin.X, mi.Position.Y + (int)camera.Y - (int)camera.Origin.Y));
             }
-            if (gameTimer.Update(gameTime)) 
+            if (jewelHandler.first == false)
             {
-                gameState = GameState.Score;
+                if (gameTimer.Update(gameTime))
+                {
+                    gameState = GameState.Score;
+                }
             }
             parallax.Update();
         }

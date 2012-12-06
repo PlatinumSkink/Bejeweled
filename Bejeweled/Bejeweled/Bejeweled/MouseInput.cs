@@ -42,6 +42,15 @@ namespace Bejeweled
             }
             return false;
         }
+        public bool IsMouseClicked()
+        {
+            ms = Mouse.GetState();
+            if (ms.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            return false;
+        }
         public Vector2 Update(int Width, int Height)
         {
             ms = Mouse.GetState();

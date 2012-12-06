@@ -24,7 +24,10 @@ namespace Bejeweled
         bool selected = false;
 
         bool Checkie = true;
-        bool first = true;
+        bool Switched = false;
+        public bool first = true;
+
+        Point[] switchTargets = new Point[2];
 
         public Vector2 WorldSize;
         public int jewelSize = 32;
@@ -141,6 +144,15 @@ namespace Bejeweled
                     Checkie = false;
                     first = false;
                 }
+                if (Switched == true)
+                {
+                    string rememberName = jewelLists[switchTargets[0].X].jewelList[switchTargets[0].Y].Name;
+                    jewelLists[switchTargets[0].X].jewelList[switchTargets[0].Y].Name = jewelLists[switchTargets[1].X].jewelList[switchTargets[1].Y].Name;
+                    jewelLists[switchTargets[1].X].jewelList[switchTargets[1].Y].Name = rememberName;
+                    jewelLists[switchTargets[0].X].jewelList[switchTargets[0].Y].Load(jewelLists[switchTargets[0].X].jewelList[switchTargets[0].Y].Name);
+                    jewelLists[switchTargets[1].X].jewelList[switchTargets[1].Y].Load(jewelLists[switchTargets[1].X].jewelList[switchTargets[1].Y].Name);
+                    Switched = false;
+                }
             }
             if (ks.IsKeyDown(Keys.G) && pressedG == false)
             {
@@ -194,7 +206,7 @@ namespace Bejeweled
                                 {
                                     if (first == false)
                                     {
-                                        Score += (int)Math.Pow(2, ((matchedJewels - 2) * (matchedJewels - 2)));
+                                        Score += (int)Math.Pow(2, ((matchedJewels - 2)/* * (matchedJewels - 2)*/));
                                         Console.WriteLine(Score);
                                     }
                                     RemoveStuff();
@@ -227,6 +239,9 @@ namespace Bejeweled
                                 jewelLists[selectedPlace.X].jewelList[selectedPlace.Y].Load(jewelLists[selectedPlace.X].jewelList[selectedPlace.Y].Name);
                                 jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Load(jewelLists[selectedPlace.X + direction.X].jewelList[selectedPlace.Y + direction.Y].Name);
                                 Checkie = true;
+                                Switched = true;
+                                switchTargets[0] = selectedPlace;
+                                switchTargets[1] = new Point(selectedPlace.X + direction.X, selectedPlace.Y + direction.Y);
                                 break;
                             }
                         }
@@ -312,6 +327,7 @@ namespace Bejeweled
                         }*/
             int index = 0;
             int height = 0;
+            Switched = false;
             foreach (Jewel jewel in Found)
             {
                 int jewelCount = jewelLists[FoundList[index]].jewelList.IndexOf(jewel);
