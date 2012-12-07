@@ -102,6 +102,11 @@ namespace Bejeweled
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
+
             //If a new game is declared, recreate managers from the data in the WorldVariables.
             if (WorldVariables.newGame == true)
             {
