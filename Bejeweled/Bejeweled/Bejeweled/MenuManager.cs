@@ -19,6 +19,8 @@ namespace Bejeweled
 
         int[] chosenMax = new int[5];
 
+        TextClass Title;
+
         List<int> chosenValues = new List<int>();
 
         List<TextClass> input = new List<TextClass>();
@@ -66,6 +68,8 @@ namespace Bejeweled
             chosenMax[2] = 100;
             chosenMax[3] = 10;
             chosenMax[4] = 200000;
+
+            Title = new TextClass("Bejeweled", "Title", Color.White, new Vector2(Position.ScreenWidth - Position.ScreenWidth / 2, Position.ScreenHeight / 2 - Position.ScreenHeight / 4));
         }
         //Update things.
         public void Update(GameTime gameTime)
@@ -139,7 +143,7 @@ namespace Bejeweled
                         {
                             changedValue = 4;
                         }
-                        else if (option.textOn.Text == "Enter_Data")
+                        else if (option.textOn.Text == "Enter Data")
                         {
                             inputingData = false;
                             Enter();
@@ -156,7 +160,7 @@ namespace Bejeweled
                 {
                     if (recommendation.ClickedOn(isMiPressed, mi.Position))
                     {
-                        int[] values = new int[4];
+                        int[] values = new int[5];
                         if (recommendation.textOn.Text == "Basic")
                         {
                             values[0] = 6;
@@ -242,7 +246,7 @@ namespace Bejeweled
             options.Add(new Button("Rows", "Button", Vector2.Zero));
             options.Add(new Button("Difficulty", "Button", Vector2.Zero));
             options.Add(new Button("Time", "Button", Vector2.Zero));
-            options.Add(new Button("Enter_Data", "Button", Vector2.Zero));
+            options.Add(new Button("Enter Data", "Button", Vector2.Zero));
             options.Add(new Button("Back", "Button", Vector2.Zero));
             recommendations.Add(new Button("Basic", "Button", Vector2.Zero));
             recommendations.Add(new Button("Large", "Button", Vector2.Zero));
@@ -300,6 +304,10 @@ namespace Bejeweled
         //Draw all buttons and such.
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (inputingData == false)
+            {
+                Title.Draw(spriteBatch);
+            }
             foreach (var option in options)
             {
                 option.Draw(spriteBatch);
