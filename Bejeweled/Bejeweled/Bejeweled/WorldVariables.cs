@@ -12,6 +12,7 @@ namespace Bejeweled
         public static int jewels = 8;
         public static int width = 50;
         public static int height = 50;
+        public static int difficulty = 3;
         public static int time = 100;
         public static int score = 0;
         public static bool newGame = false;

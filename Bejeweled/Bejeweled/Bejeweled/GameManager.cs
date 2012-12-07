@@ -29,9 +29,9 @@ namespace Bejeweled
         ParallaxObject parallax;
 
         //The GameManager includes a JewelHandler, a timer for the game, a parallax background and a camera. All data assigned.
-        public GameManager(Viewport viewport, Vector2 WorldSize, int jewels, int timeSeconds)
+        public GameManager(Viewport viewport, Vector2 WorldSize, int jewels, int _desiredJewels, int timeSeconds)
         {
-            jewelHandler = new JewelHandler(WorldSize, 32, (byte)jewels, 3, new Vector2(0, 0));
+            jewelHandler = new JewelHandler(WorldSize, 32, (byte)jewels, _desiredJewels, new Vector2(0, 0));
             remainingTime = timeSeconds * 1000;
             gameTimer = new Timer(remainingTime, true);
             camera = new Camera(viewport, 

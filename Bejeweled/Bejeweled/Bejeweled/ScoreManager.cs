@@ -12,8 +12,6 @@ namespace Bejeweled
 {
     class ScoreManager
     {
-        //List<string> Scores;
-
         List<TextClass> places;
         List<TextClass> scores;
         List<TextClass> names;
@@ -32,8 +30,6 @@ namespace Bejeweled
         HighScoreClass highScores;
 
         public bool inputName = false;
-
-        int stayTimer = 0;
 
         int textSpaceY = 30;
         int textSpaceX = 50;
@@ -217,9 +213,7 @@ namespace Bejeweled
         {
             if ((km.Key(Keys.Enter) || km.Key(Keys.Space)) && inputName == false)
             {
-                stayTimer = 0;
                 gameState = GameState.Menu;
-                //return Main.MenuButtons.CheckScore;
             }
             return gameState;
         }

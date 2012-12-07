@@ -76,7 +76,7 @@ namespace Bejeweled
             highScore.SetScores();
 
             //Create my managers.
-            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10, 100);
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(50, 50), 10, 3, 100);
             menuManager = new MenuManager();
             scoreManager = new ScoreManager(highScore, Content);
             // TODO: use this.Content to load your game content here
@@ -105,7 +105,7 @@ namespace Bejeweled
             //If a new game is declared, recreate managers from the data in the WorldVariables.
             if (WorldVariables.newGame == true)
             {
-                gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(WorldVariables.width, WorldVariables.height), WorldVariables.jewels, WorldVariables.time);
+                gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(WorldVariables.width, WorldVariables.height), WorldVariables.jewels, WorldVariables.difficulty, WorldVariables.time);
                 menuManager = new MenuManager();
                 scoreManager.inputName = true;
                 WorldVariables.newGame = false;
@@ -162,9 +162,9 @@ namespace Bejeweled
         }
 
         //When custom data has been inputed in the menu, this function will be used to create a manager with this data.
-        public void EnterGameData(int jewels, int width, int height, int time)
+        public void EnterGameData(int jewels, int width, int height, int difficulty, int time)
         {
-            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels, time);
+            gameManager = new GameManager(graphics.GraphicsDevice.Viewport, new Vector2(width, height), jewels, difficulty, time);
         }
 
         /// <summary>

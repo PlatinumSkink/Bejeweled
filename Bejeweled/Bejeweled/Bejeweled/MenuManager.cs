@@ -10,16 +10,18 @@ namespace Bejeweled
 {
     class MenuManager
     {
+        //The size of the stage, number of jewels used and time spent playing is all customizable. Contained here.
         int chosenWidth = 30;
         int chosenHeight = 30;
         int chosenJewels = 6;
+        int chosenDifficulty = 3;
         int chosenTime = 100;
+
+        int[] chosenMax = new int[5];
 
         List<int> chosenValues = new List<int>();
 
         List<TextClass> input = new List<TextClass>();
-
-        bool PlacedText = false;
 
         public bool inputingData = false;
 
@@ -30,19 +32,16 @@ namespace Bejeweled
 
         byte changedValue = 0;
 
-        enum ValueChanging { Jewels, Lines, Rows, Time }
-
-        ValueChanging valueToChange = ValueChanging.Jewels;
-
         public enum GameState { Menu, Game, Score, Quit }
 
         GameState buttonPressed = GameState.Menu;
 
         public MenuManager()
         {
-  
             Construct();
         }
+        //The constructor needs to be called multiple times. Hence here is a seperate one.
+        //All needed values and texts are assigned and made.
         public void Construct()
         {
             options.Add(new Button("Play Game", "Button", Vector2.Zero));
@@ -56,31 +55,42 @@ namespace Bejeweled
             {
                 option.PlaceText(option.textOn.Text);
             }
-            PlacedText = true;
             chosenValues = new List<int>();
             chosenValues.Add(chosenJewels);
             chosenValues.Add(chosenWidth);
             chosenValues.Add(chosenHeight);
+            chosenValues.Add(chosenDifficulty);
             chosenValues.Add(chosenTime);
+            chosenMax[0] = 10;
+            chosenMax[1] = 100;
+            chosenMax[2] = 100;
+            chosenMax[3] = 10;
+            chosenMax[4] = 200000;
         }
+        //Update things.
         public void Update(GameTime gameTime)
         {
             bool isMiPressed = mi.Clicked();
             if (inputingData == true)
             {
+                //Make the text of the unselected value blue.
                 foreach (var text in input)
                 {
-
+                    if (input.IndexOf(text) == changedValue)
+                    {
+                        text.Color = Color.White;
+                    }
+                    else
+                    {
+                        text.Color = Color.Blue;
+                    }
                 }
                 for (int i = 0; i < chosenValues.Count; i++)
                 {
                     input[i].Text = "< " + chosenValues[i] + " >";
                 }
-                /*input[0].Text = "< " + chosenJewels + " >";
-                input[1].Text = "< " + chosenWidth + " >";
-                input[2].Text = "< " + chosenHeight + " >";
-                input[3].Text = "< " + chosenTime + " >";*/
             }
+            //Update all buttons.
             foreach (Button option in options)
             {
                 option.Update(isMiPressed, mi.IsMouseClicked() == false);
@@ -95,6 +105,7 @@ namespace Bejeweled
                 {
                     if (option.ClickedOn(isMiPressed, mi.Position))
                     {
+                        //If a button is pressed, run the appropriate function. 
                         if (option.textOn.Text == "Play Game")
                         {
                             Play_Game();
@@ -107,25 +118,26 @@ namespace Bejeweled
                         {
                             Quit();
                         }
+                            //And if pressed a button which simply changes what value to change, change it.
                         else if (option.textOn.Text == "Jewels")
                         {
                             changedValue = 0;
-                            valueToChange = ValueChanging.Jewels;
                         }
                         else if (option.textOn.Text == "Lines")
                         {
                             changedValue = 1;
-                            valueToChange = ValueChanging.Lines;
                         }
                         else if (option.textOn.Text == "Rows")
                         {
                             changedValue = 2;
-                            valueToChange = ValueChanging.Rows;
+                        }
+                        else if (option.textOn.Text == "Difficulty")
+                        {
+                            changedValue = 3;
                         }
                         else if (option.textOn.Text == "Time")
                         {
-                            changedValue = 3;
-                            valueToChange = ValueChanging.Time;
+                            changedValue = 4;
                         }
                         else if (option.textOn.Text == "Enter_Data")
                         {
@@ -139,6 +151,7 @@ namespace Bejeweled
                         return;
                     }
                 }
+                //If pressed on a recommendation, change to recommendation.
                 foreach (Button recommendation in recommendations)
                 {
                     if (recommendation.ClickedOn(isMiPressed, mi.Position))
@@ -146,101 +159,61 @@ namespace Bejeweled
                         int[] values = new int[4];
                         if (recommendation.textOn.Text == "Basic")
                         {
-                            //6, 10, 10, 60;
                             values[0] = 6;
                             values[1] = 10;
                             values[2] = 10;
-                            values[3] = 60;
+                            values[3] = 3;
+                            values[4] = 60;
                         }
                         else if (recommendation.textOn.Text == "Large")
                         {
-                            //values = new int[8, 25, 25, 80];
                             values[0] = 8;
                             values[1] = 25;
                             values[2] = 25;
-                            values[3] = 80;
+                            values[3] = 3;
+                            values[4] = 80;
                         }
                         else if (recommendation.textOn.Text == "Huge")
                         {
-                            //values = new int[10, 50, 50, 100];
                             values[0] = 10;
                             values[1] = 50;
                             values[2] = 50;
-                            values[3] = 100;
+                            values[3] = 3;
+                            values[4] = 100;
                         }
                         else if (recommendation.textOn.Text == "Tower")
                         {
-                            //values = new int[8, 10, 40, 80];
                             values[0] = 8;
                             values[1] = 10;
                             values[2] = 40;
-                            values[3] = 80;
+                            values[3] = 3;
+                            values[4] = 80;
                         }
                         Recommendation(values);
                         return;
                     }
                 }
+                //If pressed anywhere else, change value.
                 if (inputingData == true)
                 {
                     CheckClick();
                 }
             }
         }
+        //If left of a certain spot, decrease value. Else, increase. Clamp it within desired range.
         public void CheckClick()
         {
-            /*if (mi.Clicked())
-            {*/
-                if (mi.Position.X > input[0].X + 30)
-                {
-                    /*switch (valueToChange)
-                    {
-                        case ValueChanging.Jewels:
-                            chosenJewels++;
-                            break;
-                        case ValueChanging.Lines:
-                            chosenWidth++;
-                            break;
-                        case ValueChanging.Rows:
-                            chosenHeight++;
-                            break;
-                        case ValueChanging.Time:
-                            chosenTime++;
-                            break;
-                        default:
-                            break;
-                    }*/
-                    chosenValues[changedValue]++;
-                }
-                else
-                {
-                    /*switch (valueToChange)
-                    {
-                        case ValueChanging.Jewels:
-                            chosenJewels--;
-                            break;
-                        case ValueChanging.Lines:
-                            chosenWidth--;
-                            break;
-                        case ValueChanging.Rows:
-                            chosenHeight--;
-                            break;
-                        case ValueChanging.Time:
-                            chosenTime--;
-                            break;
-                        default:
-                            break;
-                    }*/
-                    chosenValues[changedValue]--;
-                }
-                 
-               /*     chosenValues[changedValue] += 1;
-                }
-                else
-                {
-                    chosenValues[changedValue] -= 1;
-                }*/
-            //}
+            if (mi.Position.X > input[0].X + 30)
+            {
+                chosenValues[changedValue]++;
+            }
+            else
+            {
+                chosenValues[changedValue]--;
+            }
+            chosenValues[changedValue] = (int)MathHelper.Clamp(chosenValues[changedValue], 2, chosenMax[changedValue]);
         }
+        //If going back, restore everything to original status and run the constructor again.
         public void Back()
         {
             inputingData = false;
@@ -249,21 +222,25 @@ namespace Bejeweled
             recommendations = new List<Button>();
             Construct();
         }
+        //When playing, run all decided parameters into the WorldVariables so the gameManager can pick them up.
         public void Enter()
         {
             buttonPressed = GameState.Game;
             WorldVariables.jewels = chosenValues[0];
             WorldVariables.width = chosenValues[1];
             WorldVariables.height = chosenValues[2];
-            WorldVariables.time = chosenValues[3];
+            WorldVariables.difficulty = chosenValues[3];
+            WorldVariables.time = chosenValues[4];
             WorldVariables.newGame = true;
         }
+        //Play the game creates a new set of buttons for the player to input their desired game data.
         public void Play_Game()
         {
             options = new List<Button>();
             options.Add(new Button("Jewels", "Button", Vector2.Zero));
             options.Add(new Button("Lines", "Button", Vector2.Zero));
             options.Add(new Button("Rows", "Button", Vector2.Zero));
+            options.Add(new Button("Difficulty", "Button", Vector2.Zero));
             options.Add(new Button("Time", "Button", Vector2.Zero));
             options.Add(new Button("Enter_Data", "Button", Vector2.Zero));
             options.Add(new Button("Back", "Button", Vector2.Zero));
@@ -273,7 +250,7 @@ namespace Bejeweled
             recommendations.Add(new Button("Tower", "Button", Vector2.Zero));
             for (int i = 0; i < options.Count; i++)
             {
-                options[i].Pos = new Vector2(100, 100 + 60 * i);
+                options[i].Pos = new Vector2(100, 100 + 50 * i);
                 options[i].PlaceText(options[i].textOn.Text);
             }
             for (int i = 0; i < recommendations.Count; i++)
@@ -281,48 +258,46 @@ namespace Bejeweled
                 recommendations[i].Pos = new Vector2(100 + 140 * i, 50);
                 recommendations[i].PlaceText(recommendations[i].textOn.Text);
             }
-            PlacedText = true;
             for (int i = 0; i < chosenValues.Count; i++)
             {
                 input.Add(new TextClass(chosenValues[i].ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
             }
-             /*   input.Add(new TextClass(chosenJewels.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
-            input.Add(new TextClass(chosenWidth.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));
-            input.Add(new TextClass(chosenHeight.ToString(), "SegoeUIMono", Color.White, Vector2.Zero));*/
             for (int i = 0; i < input.Count; i++)
             {
-                input[i].Pos = new Vector2(300, 100 + 60 * i);
+                input[i].Pos = new Vector2(300, 100 + 50 * i);
             }
             inputingData = true;
         }
+        //Score pressed, change state to score.
         public void Score()
         {
             buttonPressed = GameState.Score;
         }
+        //Pressed quit, quit.
         public void Quit()
         {
             Main.exit = true;
             buttonPressed = GameState.Quit;
         }
-        public void Recommendation(int[] _values/*, int _jewels, int _width, int _height, int _time*/)
+        //If pressed on a recommendation, input the data of the recommendation.
+        public void Recommendation(int[] _values)
         {
             for (int i = 0; i < _values.Length; i++)
             {
                 chosenValues[i] = _values[i];
             }
-            /*chosenValues[0] = _jewels;
-            chosenValues[1] = _width;
-            chosenValues[2] = _height;
-            chosenValues[3] = _time;*/
         }
+        //Check the state and from there return what state to go to.
         public GameState CheckState()
         {
             return buttonPressed;
         }
+        //When going back, the state in the menu needs to be reset or the menu will be closed immediately upon return.
         public void ResetState()
         {
             buttonPressed = GameState.Menu;
         }
+        //Draw all buttons and such.
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var option in options)

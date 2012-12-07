@@ -31,10 +31,6 @@ namespace Bejeweled
         public int jewelSize = 32;
         Random rand = new Random();
 
-        bool pressedG = false;
-        bool pressedLeft = false;
-        //bool oneIsSelected = false;
-
         byte numberOfJewels;
         int matchedJewels = 0;
         int desiredNumber = 3;
@@ -156,7 +152,6 @@ namespace Bejeweled
         //When the mouse is pressed.
         public void MouseClick(Point ms)
         {
-            pressedLeft = true;
             //If nothing is falling.
             if (NoneFalling())
             {
@@ -229,7 +224,7 @@ namespace Bejeweled
                         //If it isn't at the start of the game, that is.
                         if (first == false)
                         {
-                            Score += (int)Math.Pow(2, ((matchedJewels - 2) * 2));
+                            Score += (int)Math.Pow(2, ((matchedJewels - (desiredNumber - 2))));
                             Console.WriteLine(Score);
                         }
                         RemoveStuff();
